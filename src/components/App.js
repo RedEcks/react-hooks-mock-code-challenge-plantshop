@@ -9,17 +9,23 @@ import PlantPage from "./PlantPage";
 
 function App() {
   const [plantInfo,setplantsInfo] = useState([])
+  const [search, setSearch]=useState("")
+
+  function handleAddPlant(newPlant){
+    let plants = [...plantInfo,newPlant];
+    setplantsInfo(plants)
+  }
 
   useEffect(()=>{
     fetch("http://localhost:6001/plants")
       .then((response)=>response.json())
       .then((data)=>setplantsInfo(data))
   },[])
-
+  let results = plantInfo.filter((plant)=>plant.name.includes(search))
   return (
     <div className="app">
       <Header />
-      <PlantPage plantInfo={plantInfo} />
+      <PlantPage setSearch={setSearch} handleAddPlant={handleAddPlant} setplantsInfo={setplantsInfo} plantInfo={results} />
     </div>
   );
 }
